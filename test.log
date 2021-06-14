@@ -1,0 +1,154 @@
+
+Welcome to Cloud Shell! Type "help" to get started.
+Your Cloud Platform project in this session is set to wordpressapp-316317.
+Use “gcloud config set project [PROJECT_ID]” to change to a different project.
+gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project wordpressapp-316317guptaalok1010@cloudshell:~ (wordpressapp-316317)$ gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project wordpressapp-316317
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for cluster-1.
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get nodes
+NAME                                       STATUS   ROLES    AGE     VERSION
+gke-cluster-1-default-pool-1b1fca77-0b38   Ready    <none>   2m24s   v1.19.9-gke.1900gke-cluster-1-default-pool-1b1fca77-4wp6   Ready    <none>   2m26s   v1.19.9-gke.1900
+gke-cluster-1-default-pool-1b1fca77-nnvz   Ready    <none>   2m25s   v1.19.9-gke.1900
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl create deployment hello-world --image=gcr.io/google-samples/hello-app:1.0
+deployment.apps/hello-world created
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get deployments
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+hello-world   1/1     1            1           33s
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get all
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/hello-world-5457b44555-5t5nb   1/1     Running   0          41s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.8.0.1     <none>        443/TCP   6m7s
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world   1/1     1            1           42s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-world-5457b44555   1         1         1       42s
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl scale deployment --replica 3
+Error: unknown flag: --replica
+See 'kubectl scale --help' for usage.
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl scale deployment --replica=3
+Error: unknown flag: --replica
+See 'kubectl scale --help' for usage.
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl scale deployment --replicas=3
+error: resource(s) were provided, but no name was specified
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl scale deployment hello-world --replicas=3
+deployment.apps/hello-world scaled
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get all
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/hello-world-5457b44555-5t5nb   1/1     Running   0          4m28s
+pod/hello-world-5457b44555-b9dl9   1/1     Running   0          10s
+pod/hello-world-5457b44555-wwfr7   1/1     Running   0          10s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.8.0.1     <none>        443/TCP   9m53s
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world   3/3     3            3           4m29s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-world-5457b44555   3         3         3       4m29s
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl expose deployment hello-world --type LoadBalancer --port 80 --target-port 8080
+service/hello-world exposed
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get all
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/hello-world-5457b44555-5t5nb   1/1     Running   0          6m25s
+pod/hello-world-5457b44555-b9dl9   1/1     Running   0          2m7s
+pod/hello-world-5457b44555-wwfr7   1/1     Running   0          2m7s
+
+NAME                  TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
+service/hello-world   LoadBalancer   10.8.11.35   <pending>     80:32677/TCP   6s
+service/kubernetes    ClusterIP      10.8.0.1     <none>        443/TCP        11m
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world   3/3     3            3           6m27s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-world-5457b44555   3         3         3       6m27s
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get all
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/hello-world-5457b44555-5t5nb   1/1     Running   0          6m55s
+pod/hello-world-5457b44555-b9dl9   1/1     Running   0          2m37s
+pod/hello-world-5457b44555-wwfr7   1/1     Running   0          2m37s
+
+NAME                  TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
+service/hello-world   LoadBalancer   10.8.11.35   <pending>     80:32677/TCP   36s
+service/kubernetes    ClusterIP      10.8.0.1     <none>        443/TCP        12m
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world   3/3     3            3           6m56s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-world-5457b44555   3         3         3       6m56s
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get all
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/hello-world-5457b44555-5t5nb   1/1     Running   0          7m17s
+pod/hello-world-5457b44555-b9dl9   1/1     Running   0          2m59s
+pod/hello-world-5457b44555-wwfr7   1/1     Running   0          2m59s
+
+NAME                  TYPE           CLUSTER-IP   EXTERNAL-IP    PORT(S)        AGE
+service/hello-world   LoadBalancer   10.8.11.35   34.72.190.62   80:32677/TCP   57s
+service/kubernetes    ClusterIP      10.8.0.1     <none>         443/TCP        12m
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world   3/3     3            3           7m18s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-world-5457b44555   3         3         3       7m18s
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-b9dl9
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-wwfr7
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubeclt delete pod hello-world-5457b44555-wwfr7
+-bash: kubeclt: command not found
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl delete pod hello-world-5457b44555-wwfr7
+pod "hello-world-5457b44555-wwfr7" deleted
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ kubectl get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+hello-world-5457b44555-5t5nb   1/1     Running   0          10m
+hello-world-5457b44555-b9dl9   1/1     Running   0          5m49s
+hello-world-5457b44555-k96kh   1/1     Running   0          11s
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-b9dl9
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+
+Hostname: hello-world-5457b44555-b9dl9
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-k96kh
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-k96kh
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-k96kh
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-k96kh
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ curl http://34.72.190.62
+Hello, world!
+Version: 1.0.0
+Hostname: hello-world-5457b44555-b9dl9
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ ls -ltr
+total 12
+drwxr-xr-x 3 guptaalok1010 guptaalok1010 4096 Apr 16 19:35 kubernetes-examples-voting-app
+drwxr-xr-x 7 guptaalok1010 guptaalok1010 4096 Jun  9 17:43 wordpress
+-rw-r--r-- 1 guptaalok1010 guptaalok1010  913 Jun 14 10:05 README-cloudshell.txt
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$ vi test.log
+guptaalok1010@cloudshell:~ (wordpressapp-316317)$
