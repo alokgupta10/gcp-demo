@@ -1,0 +1,54 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  creationTimestamp: ~
+  labels: 
+    app: wordpress
+  name: wordpress
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: wordpress
+  strategy: {}
+  template: 
+    metadata: 
+      creationTimestamp: ~
+      labels: 
+        app: wordpress
+    spec: 
+      containers: 
+        - 
+          env: 
+            - 
+              name: WORDPRESS_DB_USER
+              secretKeyRef: 
+                key: username
+                name: dev-db-secret
+              valueFrom: ~
+            - 
+              name: WORDPRESS_DB_PASSWORD
+              secretKeyRef: 
+                key: password
+                name: dev-db-secret
+              valueFrom: ~
+            - 
+              name: WORDPRESS_DB_HOST
+              secretKeyRef: 
+                key: address
+                name: dev-db-secret
+              valueFrom: ~
+          image: wordpress
+          name: wordpress
+          volumeMounts: 
+            - 
+              mountPath: "/var/www/html"
+              name: mypd
+    volumes: 
+      - 
+        name: mypd
+        persistentVolumeClaim: 
+          claimName: myclaim
+status: {}
+
